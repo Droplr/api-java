@@ -8,7 +8,9 @@ import com.droplr.http.client.DefaultHttpClient;
 import com.droplr.http.client.HttpClient;
 import com.droplr.http.future.HttpRequestFuture;
 import com.droplr.http.processor.HttpResponseProcessor;
+import com.droplr.service.auth.AppCredentials;
 import com.droplr.service.auth.AuthUtils;
+import com.droplr.service.auth.UserCredentials;
 import com.droplr.service.domain.*;
 import com.droplr.service.operation.*;
 import com.droplr.service.serialization.*;
@@ -20,7 +22,8 @@ import java.util.List;
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>
  */
-public class DefaultDroplrService implements DroplrService, OperationSubmissionHandler {
+public class DefaultDroplrService
+        implements DroplrService, OperationSubmissionHandler {
 
     // constants ------------------------------------------------------------------------------------------------------
 

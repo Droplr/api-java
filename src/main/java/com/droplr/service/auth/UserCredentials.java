@@ -1,4 +1,4 @@
-package com.droplr.service;
+package com.droplr.service.auth;
 
 import com.droplr.common.TextUtils;
 

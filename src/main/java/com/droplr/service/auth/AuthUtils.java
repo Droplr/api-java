@@ -1,8 +1,6 @@
 package com.droplr.service.auth;
 
 import com.droplr.common.TextUtils;
-import com.droplr.service.AppCredentials;
-import com.droplr.service.UserCredentials;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 

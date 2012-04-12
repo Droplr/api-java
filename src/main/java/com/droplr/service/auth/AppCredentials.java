@@ -1,4 +1,4 @@
-package com.droplr.service;
+package com.droplr.service.auth;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>
