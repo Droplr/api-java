@@ -1,0 +1,13 @@
+# Ignore maven output directories
+target
+# Ignore IDEA project files
+*.iws
+*.ipr
+*.iml
+.idea
+# Ignore mac crap
+.DS_Store
+# Ignore Eclipse stuff (for those brave enough to still be using it...)
+/.project
+/.classpath
+/.settings
