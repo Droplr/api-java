@@ -4,9 +4,8 @@ import com.droplr.common.ContentType;
 import com.droplr.service.domain.AbstractDrop;
 import com.droplr.service.domain.Account;
 import com.droplr.service.domain.Drop;
-import com.droplr.service.operation.CreateDropOperation;
-import com.droplr.service.operation.ReadAccountOperation;
-import com.droplr.service.operation.ReadDropOperation;
+import com.droplr.service.domain.DropListFilter;
+import com.droplr.service.operation.*;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>
@@ -27,9 +26,9 @@ public interface DroplrService {
     ReadAccountOperation readAccount(UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException;
 
-    Object editAccount(Account account)
+    EditAccountOperation editAccount(Account account)
             throws IllegalArgumentException, IllegalStateException;
-    Object editAccount(Account account, UserCredentials credentials)
+    EditAccountOperation editAccount(Account account, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException;
 
     CreateDropOperation shortenLink(String link)
@@ -52,23 +51,23 @@ public interface DroplrService {
     ReadDropOperation readDrop(String dropCode, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException;
 
-    Object editDrop(Drop drop)
+    EditDropOperation editDrop(Drop drop)
             throws IllegalArgumentException, IllegalStateException;
-    Object editDrop(Drop drop, UserCredentials credentials)
-            throws IllegalArgumentException, IllegalStateException;
-
-    Object listDrops()
-            throws IllegalArgumentException, IllegalStateException;
-    Object listDrops(UserCredentials credentials)
-            throws IllegalArgumentException, IllegalStateException;
-    Object listDrops(Object filter)
-            throws IllegalArgumentException, IllegalStateException;
-    Object listDrops(Object filter, UserCredentials credentials)
+    EditDropOperation editDrop(Drop drop, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException;
 
-    Object deleteDrop(String dropCode)
+    ListDropsOperation listDrops()
             throws IllegalArgumentException, IllegalStateException;
-    Object deleteDrop(String dropCode, UserCredentials credentials)
+    ListDropsOperation listDrops(UserCredentials credentials)
+            throws IllegalArgumentException, IllegalStateException;
+    ListDropsOperation listDrops(DropListFilter filter)
+            throws IllegalArgumentException, IllegalStateException;
+    ListDropsOperation listDrops(DropListFilter filter, UserCredentials credentials)
+            throws IllegalArgumentException, IllegalStateException;
+
+    DeleteDropOperation deleteDrop(String dropCode)
+            throws IllegalArgumentException, IllegalStateException;
+    DeleteDropOperation deleteDrop(String dropCode, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException;
 
     // enums ----------------------------------------------------------------------------------------------------------

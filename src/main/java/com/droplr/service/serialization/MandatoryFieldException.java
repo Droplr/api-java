@@ -1,4 +1,4 @@
-package com.droplr.service.parsing;
+package com.droplr.service.serialization;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>

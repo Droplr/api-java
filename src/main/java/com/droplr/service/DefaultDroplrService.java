@@ -1,6 +1,7 @@
 package com.droplr.service;
 
 import com.droplr.common.ContentType;
+import com.droplr.common.QueryParams;
 import com.droplr.common.TextUtils;
 import com.droplr.http.CannotExecuteRequestException;
 import com.droplr.http.client.DefaultHttpClient;
@@ -8,17 +9,13 @@ import com.droplr.http.client.HttpClient;
 import com.droplr.http.future.HttpRequestFuture;
 import com.droplr.http.processor.HttpResponseProcessor;
 import com.droplr.service.auth.AuthUtils;
-import com.droplr.service.domain.AbstractDrop;
-import com.droplr.service.domain.Account;
-import com.droplr.service.domain.Drop;
-import com.droplr.service.domain.DropCreation;
+import com.droplr.service.domain.*;
 import com.droplr.service.operation.*;
-import com.droplr.service.parsing.HeadersAccountResponseProcessor;
-import com.droplr.service.parsing.HeadersDropCreationResponseProcessor;
-import com.droplr.service.parsing.HeadersDropResponseProcessor;
+import com.droplr.service.serialization.*;
 import org.jboss.netty.handler.codec.http.*;
 
 import java.security.SignatureException;
+import java.util.List;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>
@@ -90,7 +87,7 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
         DefaultHttpClient client = new DefaultHttpClient();
         client.setUseSsl(this.useHttps);
         client.setUseNio(true);
-        client.setRequestTimeoutInMillis(20000);
+        client.setRequestTimeoutInMillis(DEFAULT_REQUEST_TIMEOUT);
         client.setConnectionTimeoutInMillis(3000);
 
         this.client = client;
@@ -113,43 +110,50 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
     @Override
     public ReadAccountOperation readAccount(UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
-        // Create & sign the request
-        HttpRequest request = this.createRequest(HttpMethod.GET, "/account");
+        // Grab whatever format we're using right now
+        Format format = this.format;
+
+        // Create & sign request
+        HttpRequest request = this.createRequest(HttpMethod.GET, "/account", format);
         request.setHeader(HttpHeaders.Names.CONTENT_LENGTH, 0);
         this.authorizeRequest(request, credentials);
 
         HttpResponseProcessor<Account> responseProcessor;
-        if (this.format == Format.JSON) {
-            responseProcessor = null;
+        if (format == Format.JSON) {
+            responseProcessor = new JsonGenericDeserializer<Account>();
         } else {
-            responseProcessor = new HeadersAccountResponseProcessor();
+            responseProcessor = new HeadersAccountDeserializer();
         }
 
         return new ReadAccountOperation(request, responseProcessor, this);
     }
 
     @Override
-    public Object editAccount(Account account)
+    public EditAccountOperation editAccount(Account account)
             throws IllegalArgumentException, IllegalStateException {
         return editAccount(account, this.defaultUserCredentials);
     }
 
     @Override
-    public Object editAccount(Account account, UserCredentials credentials)
+    public EditAccountOperation editAccount(Account account, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
-        // Create & sign the request
-        HttpRequest request = this.createRequest(HttpMethod.POST, "/account");
-        request.setHeader(HttpHeaders.Names.CONTENT_LENGTH, 0);
-        this.authorizeRequest(request, credentials);
-
-        HttpResponseProcessor<Account> responseProcessor;
-        if (this.format == Format.JSON) {
-            responseProcessor = null;
-        } else {
-            responseProcessor = new HeadersAccountResponseProcessor();
-        }
-
-        return new ReadAccountOperation(request, responseProcessor, this);
+        throw new UnsupportedOperationException("Not implemented yet");
+//        // Grab whatever format we're using right now
+//        Format format = this.format;
+//
+//        // Create & sign request
+//        HttpRequest request = this.createRequest(HttpMethod.POST, "/account", format);
+//        request.setHeader(HttpHeaders.Names.CONTENT_LENGTH, 0);
+//        this.authorizeRequest(request, credentials);
+//
+//        HttpResponseProcessor<Account> responseProcessor;
+//        if (format == Format.JSON) {
+//            responseProcessor = new JsonGenericDeserializer<Account>();
+//        } else {
+//            responseProcessor = new HeadersAccountDeserializer();
+//        }
+//
+//        return new EditAccountOperation(request, responseProcessor, this);
     }
 
     @Override
@@ -173,16 +177,20 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
                                                Validations.MAX_LINK_SIZE + " bytes");
         }
 
-        // Create & sign the upload HTTP request
-        HttpRequest request = this.createUploadRequest(HttpMethod.POST, "/links", ContentType.TEXT_PLAIN, rawLinkData);
+        // Grab whatever format we're using right now
+        Format format = this.format;
+
+        // Create & sign request
+        HttpRequest request = this.createUploadRequest(HttpMethod.POST, "/links", format,
+                                                       ContentType.TEXT_PLAIN, rawLinkData);
         this.authorizeRequest(request, credentials);
 
         // Assign a responseProcessor to this request, based on the current data format
         HttpResponseProcessor<DropCreation> responseProcessor;
-        if (this.format == Format.JSON) {
-            responseProcessor = null;
+        if (format == Format.JSON) {
+            responseProcessor = new JsonGenericDeserializer<DropCreation>();
         } else {
-            responseProcessor = new HeadersDropCreationResponseProcessor();
+            responseProcessor = new HeadersDropCreationDeserializer();
         }
 
         return new CreateDropOperation(request, rawLinkData, responseProcessor, this);
@@ -212,16 +220,19 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
         // Get the appropriate ContentType for the note type
         ContentType contentType = this.contentTypeForNoteType(type);
 
-        // Create & sign the upload HTTP request
-        HttpRequest request = this.createUploadRequest(HttpMethod.POST, "/notes", contentType, rawNoteData);
+        // Grab whatever format we're using right now
+        Format format = this.format;
+
+        // Create & sign request
+        HttpRequest request = this.createUploadRequest(HttpMethod.POST, "/notes", format, contentType, rawNoteData);
         this.authorizeRequest(request, credentials);
 
         // Assign a responseProcessor to this request, based on the current data format
         HttpResponseProcessor<DropCreation> responseProcessor;
-        if (this.format == Format.JSON) {
-            responseProcessor = null;
+        if (format == Format.JSON) {
+            responseProcessor = new JsonGenericDeserializer<DropCreation>();
         } else {
-            responseProcessor = new HeadersDropCreationResponseProcessor();
+            responseProcessor = new HeadersDropCreationDeserializer();
         }
 
         return new CreateDropOperation(request, rawNoteData, responseProcessor, this);
@@ -252,16 +263,19 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
             throw new IllegalArgumentException("Filename is not valid; please use Validations.isValidFilename()");
         }
 
-        // Create the upload HTTP request
-        HttpRequest request = this.createUploadRequest(HttpMethod.POST, "/files", contentType, data);
+        // Grab whatever format we're using right now
+        Format format = this.format;
+
+        // Create & sign request
+        HttpRequest request = this.createUploadRequest(HttpMethod.POST, "/files", format, contentType, data);
         this.authorizeRequest(request, credentials);
 
         // Assign a responseProcessor to this request, based on the current data format
         HttpResponseProcessor<DropCreation> responseProcessor;
-        if (this.format == Format.JSON) {
-            responseProcessor = null;
+        if (format == Format.JSON) {
+            responseProcessor = new JsonGenericDeserializer<DropCreation>();
         } else {
-            responseProcessor = new HeadersDropCreationResponseProcessor();
+            responseProcessor = new HeadersDropCreationDeserializer();
         }
 
         return new CreateDropOperation(request, data, responseProcessor, this);
@@ -276,66 +290,91 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
     @Override
     public ReadDropOperation readDrop(String dropCode, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
-        HttpRequest request = this.createRequest(HttpMethod.GET, "/drops/" + dropCode);
+        // Grab whatever format we're using right now
+        Format format = this.format;
+
+        // Create & sign request
+        HttpRequest request = this.createRequest(HttpMethod.GET, "/drops/" + dropCode, format);
         request.addHeader(HttpHeaders.Names.CONTENT_LENGTH, 0);
         this.authorizeRequest(request, credentials);
 
         HttpResponseProcessor<Drop> parser;
-        if (this.format == Format.JSON) {
-            parser = null;
+        if (format == Format.JSON) {
+            parser = new JsonGenericDeserializer<Drop>();
         } else {
-            parser = new HeadersDropResponseProcessor();
+            parser = new HeadersDropDeserializer();
         }
 
         return new ReadDropOperation(request, parser, this);
     }
 
     @Override
-    public Object editDrop(Drop drop)
+    public EditDropOperation editDrop(Drop drop)
             throws IllegalArgumentException, IllegalStateException {
         return this.editDrop(drop, this.defaultUserCredentials);
     }
 
     @Override
-    public Object editDrop(Drop drop, UserCredentials credentials)
+    public EditDropOperation editDrop(Drop drop, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public Object listDrops()
+    public ListDropsOperation listDrops()
             throws IllegalArgumentException, IllegalStateException {
         return this.listDrops(null, this.defaultUserCredentials);
     }
 
     @Override
-    public Object listDrops(UserCredentials credentials)
+    public ListDropsOperation listDrops(UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
         return this.listDrops(null, credentials);
     }
 
     @Override
-    public Object listDrops(Object filter)
+    public ListDropsOperation listDrops(DropListFilter filter)
             throws IllegalArgumentException, IllegalStateException {
         return this.listDrops(filter, this.defaultUserCredentials);
     }
 
     @Override
-    public Object listDrops(Object filter, UserCredentials credentials)
+    public ListDropsOperation listDrops(DropListFilter filter, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+        QueryParams params = null;
+        if ((filter != null) && !filter.isEmpty()) {
+            params = ParamsSerializationUtils.serialize(filter);
+        }
+
+        // Create & sign request (drop lists *must* be in JSON format)
+        HttpRequest request = this.createRequest(HttpMethod.GET, "/drops", Format.JSON, params);
+        request.addHeader(HttpHeaders.Names.CONTENT_LENGTH, 0);
+        this.authorizeRequest(request, credentials);
+
+        HttpResponseProcessor<List<Drop>> parser = new JsonGenericDeserializer<List<Drop>>();
+
+        return new ListDropsOperation(request, parser, this);
     }
 
     @Override
-    public Object deleteDrop(String dropCode)
+    public DeleteDropOperation deleteDrop(String dropCode)
             throws IllegalArgumentException, IllegalStateException {
         return this.deleteDrop(dropCode, this.defaultUserCredentials);
     }
 
     @Override
-    public Object deleteDrop(String dropCode, UserCredentials credentials)
+    public DeleteDropOperation deleteDrop(String dropCode, UserCredentials credentials)
             throws IllegalArgumentException, IllegalStateException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        // Create & sign request
+        HttpRequest request = this.createRequest(HttpMethod.DELETE, "/drops/" + dropCode, Format.HEADERS);
+        request.addHeader(HttpHeaders.Names.CONTENT_LENGTH, 0);
+        this.authorizeRequest(request, credentials);
+
+        // DELETE request is format agnostic and contains no data so it's always run as HEADERS. It also needs no
+        // response parser since it will receive no data (just success or failure codes).
+
+        return new DeleteDropOperation(request, this);
     }
 
     // OperationSubmissionHandler -------------------------------------------------------------------------------------
@@ -353,8 +392,15 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
 
     // private helpers ------------------------------------------------------------------------------------------------
 
-    private HttpRequest createRequest(HttpMethod method, String uri) {
-        String uriWithFormat = uri + this.format.getSuffix();
+    private HttpRequest createRequest(HttpMethod method, String uri, Format format) {
+        return this.createRequest(method, uri, format, null);
+    }
+
+    private HttpRequest createRequest(HttpMethod method, String uri, Format format, QueryParams params) {
+        String uriWithFormat = uri + format.getSuffix();
+        if (params != null) {
+            uriWithFormat += '?' + params.toEncodedQueryString();
+        }
 
         HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, method, uriWithFormat);
 //        request.setHeader(HttpHeaders.Names.HOST, this.host + ':' + this.port);
@@ -364,8 +410,9 @@ public class DefaultDroplrService implements DroplrService, OperationSubmissionH
         return request;
     }
 
-    private HttpRequest createUploadRequest(HttpMethod method, String uri, ContentType contentType, byte[] data) {
-        HttpRequest request = this.createRequest(method, uri);
+    private HttpRequest createUploadRequest(HttpMethod method, String uri, Format format,
+                                            ContentType contentType, byte[] data) {
+        HttpRequest request = this.createRequest(method, uri, format, null);
         request.setHeader(HttpHeaders.Names.CONTENT_TYPE, contentType);
         request.setHeader(HttpHeaders.Names.CONTENT_LENGTH, data.length);
         request.setHeader(HttpHeaders.Names.EXPECT, HttpHeaders.Values.CONTINUE);

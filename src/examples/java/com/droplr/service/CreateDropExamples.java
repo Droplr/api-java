@@ -23,11 +23,22 @@ public class CreateDropExamples {
             return;
         }
 
+        String link = "http://this-is-a-test.com/wat";
+
+        // Before uploading, always make sure if the upload is valid with the methods in Validations class.
+        // This validation will again be performed when creating the operation; if it fails to verify, an
+        // IllegalArgumentException will be thrown.
+        if (!Validations.isValidLink(link)) {
+            System.err.println("Link is not valid");
+            service.terminate();
+            return;
+        }
+
         CreateDropOperation op;
         try {
             // Creating operations may throw IllegalArgumentExceptions if the input parameters are invalid or
             // IllegalStateException if you don't pass user credentials and you forgot to set default user credentials.
-            op = service.shortenLink("http://this-is-a-test.com/wat");
+            op = service.shortenLink(link);
         } catch (Exception e) {
             System.err.println("Could not create operation: " + e.getMessage());
             service.terminate();
@@ -60,15 +71,15 @@ public class CreateDropExamples {
         service.terminate();
     }
 
-    private static void uploadInMemoryDataExample() {
+    private static void uploadInMemoryDataExample() throws Exception {
         // TODO
     }
 
-    private static void createNoteExample() {
+    private static void createNoteExample() throws Exception {
         // TODO
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         shortenLinkExample();
         createNoteExample();
         uploadInMemoryDataExample();

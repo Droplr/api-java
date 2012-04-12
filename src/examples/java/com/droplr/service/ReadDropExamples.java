@@ -110,10 +110,14 @@ public class ReadDropExamples {
 
         // Lock this thread until request ends; normally this is where you'd go about doing other stuff with your app
         future.awaitUninterruptibly();
-
-        System.out.println("---");
+        try {
+            Thread.sleep(500L);
+        } catch (InterruptedException ignored) {
+            // ignored
+        }
 
         // When you're done, don't forget to cleanup the service
+        System.out.println("---");
         System.out.println("Shutting down service...");
         service.terminate();
     }
