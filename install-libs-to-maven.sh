@@ -1,7 +1,7 @@
 #!/bin/sh
 
-COMMONS_VERSION="1.0.7"
-HTTP_VERSION="0.8.7"
+COMMONS_VERSION="1.1.0"
+HTTP_VERSION="1.0.0"
 
 mvn install:install-file -Dfile=lib/droplr-common-${COMMONS_VERSION}.jar \
                          -DgroupId=com.droplr \
