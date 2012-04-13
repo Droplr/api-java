@@ -1,7 +1,7 @@
 package com.droplr.service.operation;
 
-import com.droplr.http.CannotExecuteRequestException;
-import com.droplr.http.future.HttpRequestFuture;
+import com.biasedbit.http.CannotExecuteRequestException;
+import com.biasedbit.http.future.HttpRequestFuture;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>

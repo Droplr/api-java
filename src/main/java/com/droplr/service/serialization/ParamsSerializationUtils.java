@@ -1,6 +1,6 @@
 package com.droplr.service.serialization;
 
-import com.droplr.common.QueryParams;
+import com.droplr.service.util.QueryParams;
 import com.droplr.service.domain.DropListFilter;
 
 /**
@@ -34,6 +34,7 @@ public class ParamsSerializationUtils {
         safeAddToParams(params, LIST_TYPE, filter.getType());
         safeAddToParams(params, LIST_SORTBY, filter.getSortBy());
         safeAddToParams(params, LIST_ORDER, filter.getOrder());
+        safeAddToParams(params, LIST_SEARCH, filter.getSearch());
 
         return params;
     }

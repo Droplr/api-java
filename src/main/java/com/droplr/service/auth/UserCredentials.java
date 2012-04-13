@@ -1,6 +1,6 @@
 package com.droplr.service.auth;
 
-import com.droplr.common.TextUtils;
+import com.droplr.service.util.TextUtils;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>

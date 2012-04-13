@@ -1,6 +1,6 @@
 package com.droplr.service.operation;
 
-import com.droplr.http.processor.HttpResponseProcessor;
+import com.biasedbit.http.processor.HttpResponseProcessor;
 import com.droplr.service.domain.Account;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 

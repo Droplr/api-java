@@ -17,27 +17,11 @@
   </properties>
 
   <dependencies>
-    <!-- Droplr HTTP subsystem; -->
+    <!-- HTTP client -->
     <dependency>
-      <groupId>com.droplr</groupId>
-      <artifactId>droplr-http</artifactId>
+      <groupId>com.biasedbit</groupId>
+      <artifactId>http-client</artifactId>
       <version>1.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- Basic common stuff from Droplr; required by the HTTP subsystem -->
-    <dependency>
-      <groupId>com.droplr</groupId>
-      <artifactId>droplr-common</artifactId>
-      <version>1.1.0</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- Basic common network stuff from Droplr; required by the HTTP subsystem -->
-    <dependency>
-      <groupId>com.droplr</groupId>
-      <artifactId>droplr-common-network</artifactId>
-      <version>1.1.0</version>
       <scope>compile</scope>
     </dependency>
 
@@ -54,14 +38,6 @@
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.1</version>
-    </dependency>
-
-    <!-- The Logback classic facade, includes the SLF4J api; required at compile time because of custom Logger -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.0.1</version>
-      <scope>compile</scope>
     </dependency>
 
     <!-- JUnit; for testing -->

@@ -1,6 +1,6 @@
 package com.droplr.service.serialization;
 
-import com.droplr.http.processor.AbstractAccumulatorProcessor;
+import com.biasedbit.http.processor.AbstractAccumulatorProcessor;
 import com.droplr.service.domain.AbstractDrop;
 import com.droplr.service.domain.Drop;
 import org.jboss.netty.buffer.ChannelBuffer;

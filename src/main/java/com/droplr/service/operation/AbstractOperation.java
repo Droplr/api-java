@@ -1,9 +1,9 @@
 package com.droplr.service.operation;
 
-import com.droplr.http.CannotExecuteRequestException;
-import com.droplr.http.future.HttpDataSinkListener;
-import com.droplr.http.future.HttpRequestFuture;
-import com.droplr.http.processor.HttpResponseProcessor;
+import com.biasedbit.http.CannotExecuteRequestException;
+import com.biasedbit.http.future.HttpDataSinkListener;
+import com.biasedbit.http.future.HttpRequestFuture;
+import com.biasedbit.http.processor.HttpResponseProcessor;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 
 /**

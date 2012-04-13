@@ -1,6 +1,6 @@
 package com.droplr.service;
 
-import com.droplr.http.future.HttpRequestFuture;
+import com.biasedbit.http.future.HttpRequestFuture;
 import com.droplr.service.auth.AppCredentials;
 import com.droplr.service.auth.UserCredentials;
 import com.droplr.service.domain.DropCreation;

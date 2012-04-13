@@ -1,13 +1,13 @@
 package com.droplr.service;
 
-import com.droplr.common.ContentType;
-import com.droplr.common.QueryParams;
-import com.droplr.common.TextUtils;
-import com.droplr.http.CannotExecuteRequestException;
-import com.droplr.http.client.DefaultHttpClient;
-import com.droplr.http.client.HttpClient;
-import com.droplr.http.future.HttpRequestFuture;
-import com.droplr.http.processor.HttpResponseProcessor;
+import com.droplr.service.util.ContentType;
+import com.droplr.service.util.QueryParams;
+import com.droplr.service.util.TextUtils;
+import com.biasedbit.http.CannotExecuteRequestException;
+import com.biasedbit.http.client.DefaultHttpClient;
+import com.biasedbit.http.client.HttpClient;
+import com.biasedbit.http.future.HttpRequestFuture;
+import com.biasedbit.http.processor.HttpResponseProcessor;
 import com.droplr.service.auth.AppCredentials;
 import com.droplr.service.auth.AuthUtils;
 import com.droplr.service.auth.UserCredentials;

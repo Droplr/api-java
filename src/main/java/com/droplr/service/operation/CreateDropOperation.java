@@ -1,8 +1,8 @@
 package com.droplr.service.operation;
 
-import com.droplr.http.connection.HttpDataSink;
-import com.droplr.http.future.HttpDataSinkListener;
-import com.droplr.http.processor.HttpResponseProcessor;
+import com.biasedbit.http.connection.HttpDataSink;
+import com.biasedbit.http.future.HttpDataSinkListener;
+import com.biasedbit.http.processor.HttpResponseProcessor;
 import com.droplr.service.domain.DropCreation;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;

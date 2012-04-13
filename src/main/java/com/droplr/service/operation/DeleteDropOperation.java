@@ -1,6 +1,6 @@
 package com.droplr.service.operation;
 
-import com.droplr.http.processor.DiscardProcessor;
+import com.biasedbit.http.processor.DiscardProcessor;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 
 /**

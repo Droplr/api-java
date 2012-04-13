@@ -1,12 +1,12 @@
 package com.droplr.service;
 
-import com.droplr.common.ContentType;
 import com.droplr.service.auth.UserCredentials;
 import com.droplr.service.domain.AbstractDrop;
 import com.droplr.service.domain.Account;
 import com.droplr.service.domain.Drop;
 import com.droplr.service.domain.DropListFilter;
 import com.droplr.service.operation.*;
+import com.droplr.service.util.ContentType;
 
 /**
  * @author <a href="http://biasedbit.com/">Bruno de Carvalho</a>

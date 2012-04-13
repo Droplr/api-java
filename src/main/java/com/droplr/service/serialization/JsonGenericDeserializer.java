@@ -1,8 +1,8 @@
 package com.droplr.service.serialization;
 
-import com.droplr.common.TextUtils;
-import com.droplr.http.processor.AbstractAccumulatorProcessor;
+import com.biasedbit.http.processor.AbstractAccumulatorProcessor;
 import com.droplr.service.domain.Drop;
+import com.droplr.service.util.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jboss.netty.buffer.ChannelBuffer;
